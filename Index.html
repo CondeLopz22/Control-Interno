@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <base target="_top">
+  <meta charset="UTF-8" />
+  <style>
+    :root{
+      --primary:#1d949a;
+      --secondary:#80c1c4;
+      --light:#cdf9f9;
+      --bg:#f1fbfb;
+      --mint:#b0efef;
+      --cyan:#5cd4d4;
+      --danger:#b70000;
+      --warning:#b06b00;
+      --ok:#217a21;
+    }
+
+    *{box-sizing:border-box;font-family:Segoe UI,Arial,sans-serif}
+    body{margin:0;background:var(--bg);color:#083f46;min-height:100vh;overflow-x:hidden}
+
+    body::before{
+      content:"";
+      position:fixed;
+      inset:0;
+      background:
+        radial-gradient(circle at 85% 12%, rgba(92,212,212,.35), transparent 28%),
+        radial-gradient(circle at 5% 95%, rgba(29,148,154,.28), transparent 35%),
+        linear-gradient(135deg, rgba(205,249,249,.8), rgba(255,255,255,.95));
+      z-index:-2;
+    }
+
+    .wave-top{position:fixed;top:0;right:0;width:75%;height:170px;background:linear-gradient(120deg,var(--mint),var(--primary));clip-path:polygon(0 0,100% 0,100% 75%,80% 55%,60% 70%,42% 45%,22% 62%,0 35%);opacity:.55;z-index:-1}
+    .wave-bottom{position:fixed;bottom:0;left:0;width:100%;height:150px;background:linear-gradient(120deg,var(--primary),var(--cyan),var(--light));clip-path:polygon(0 40%,15% 55%,32% 45%,50% 70%,68% 50%,85% 68%,100% 45%,100% 100%,0 100%);opacity:.45;z-index:-1}
+
+    .layout{display:none;grid-template-columns:280px 1fr;min-height:100vh}
+    aside{background:linear-gradient(180deg,#ffffff,#e7fbfb);border-right:1px solid rgba(29,148,154,.18);padding:28px 22px;box-shadow:8px 0 25px rgba(0,0,0,.05)}
+    .logo{display:flex;gap:12px;align-items:center;margin-bottom:35px}
+    .logo-box{width:54px;height:54px;border-radius:16px;background:var(--primary);color:white;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:24px}
+    .logo h2{margin:0;color:var(--primary);font-size:20px}
+    .logo span{font-size:12px;color:#52747a}
+
+    .nav button{width:100%;border:0;background:transparent;text-align:left;padding:15px 18px;border-radius:14px;margin-bottom:8px;color:#06434a;font-weight:600;cursor:pointer;font-size:15px}
+    .nav button.active,.nav button:hover{background:var(--primary);color:white;box-shadow:0 8px 18px rgba(29,148,154,.25)}
+
+    main{padding:36px 42px 80px}
+    .topbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:28px}
+    .title h1{margin:0;color:#08777f;font-size:30px}
+    .title p{margin:6px 0 0;color:#5d7478}
+
+    .user-card{background:white;padding:12px 18px;border-radius:999px;display:flex;gap:12px;align-items:center;box-shadow:0 8px 22px rgba(0,0,0,.08)}
+    .avatar{width:42px;height:42px;border-radius:50%;background:var(--primary);color:white;display:flex;align-items:center;justify-content:center;font-weight:800}
+
+    .cards{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;margin-bottom:24px}
+    .card{background:rgba(255,255,255,.88);backdrop-filter:blur(10px);border:1px solid rgba(29,148,154,.15);border-radius:22px;padding:22px;box-shadow:0 12px 28px rgba(0,0,0,.08)}
+    .kpi{display:flex;justify-content:space-between;align-items:center}
+    .kpi strong{font-size:34px;color:var(--primary)}
+    .kpi span{color:#526b70;font-size:14px}
+
+    .filters{background:white;border-radius:22px;padding:22px;display:grid;grid-template-columns:repeat(6,1fr);gap:16px;margin-bottom:22px;box-shadow:0 12px 28px rgba(0,0,0,.08)}
+    label{display:block;font-size:13px;margin-bottom:6px;font-weight:700;color:#07545b}
+    select,input,textarea{width:100%;border:1px solid #cce4e5;border-radius:12px;padding:12px;background:white;color:#163f45;outline:none}
+
+    .btn{border:0;background:var(--primary);color:white;padding:12px 18px;border-radius:12px;cursor:pointer;font-weight:700;box-shadow:0 8px 18px rgba(29,148,154,.25)}
+    .btn.secondary{background:#e9f8f8;color:#07545b;box-shadow:none}
+    .btn:disabled{opacity:.7;cursor:not-allowed}
+
+    .tabs{display:flex;gap:10px;margin-bottom:14px}
+    .tab{border:0;border-radius:12px;padding:12px 20px;cursor:pointer;font-weight:700;background:#e9f8f8;color:#07545b}
+    .tab.active{background:var(--primary);color:white}
+
+    .table-wrap{background:white;border-radius:22px;overflow:hidden;box-shadow:0 12px 28px rgba(0,0,0,.08)}
+    table{width:100%;border-collapse:collapse}
+    th,td{padding:15px;border-bottom:1px solid #e2f0f1;font-size:14px;vertical-align:top}
+    th{color:#07545b;background:#f9ffff}
+
+    .badge{padding:7px 12px;border-radius:999px;font-size:12px;font-weight:700;display:inline-block}
+    .alta{background:#ffe5e5;color:var(--danger)}
+    .media{background:#fff3d7;color:var(--warning)}
+    .baja{background:#e6f8e6;color:var(--ok)}
+    .estado{background:#e2f4ff;color:#0071aa}
+    .estado.realizado{background:#e6f8e6;color:var(--ok)}
+    .estado.vencido{background:#ffe5e5;color:var(--danger)}
+
+    .actions{display:flex;gap:8px}
+    .small-btn{border:0;background:#e8f8f8;color:#07545b;border-radius:10px;padding:8px 10px;cursor:pointer;font-weight:700}
+
+    .modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.35);align-items:center;justify-content:center;padding:20px;z-index:10}
+    .modal-content{width:640px;max-width:95%;background:white;border-radius:24px;padding:26px;box-shadow:0 20px 50px rgba(0,0,0,.2)}
+    .modal h2{margin-top:0;color:var(--primary)}
+
+    .grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+    .empty{text-align:center;padding:35px;color:#5d7478}
+
+    .login-screen{
+      min-height:100vh;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:20px;
+    }
+
+    .login-card{
+      width:420px;
+      max-width:100%;
+      background:rgba(255,255,255,.92);
+      border-radius:24px;
+      padding:28px;
+      box-shadow:0 12px 28px rgba(0,0,0,.12);
+      border:1px solid rgba(29,148,154,.2);
+    }
+
+    .login-card h2{margin:0 0 8px;color:#08777f}
+    .login-card p{margin:0 0 18px;color:#5d7478}
+    .error-text{color:#b70000;font-size:13px;min-height:20px;margin-top:8px}
+
+    @media(max-width:1000px){.layout{grid-template-columns:1fr}aside{display:none}.cards{grid-template-columns:1fr 1fr}.filters{grid-template-columns:1fr 1fr}}
+    @media(max-width:650px){main{padding:24px 16px 90px}.cards,.filters{grid-template-columns:1fr}.topbar{display:block}table{font-size:12px}th:nth-child(3),td:nth-child(3),th:nth-child(4),td:nth-child(4){display:none}}
+  </style>
+</head>
+<body>
+  <div class="wave-top"></div>
+  <div class="wave-bottom"></div>
+
+  <section class="login-screen" id="loginScreen">
+    <div class="login-card">
+      <h2>Ingreso al sistema</h2>
+      <p>Selecciona tu usuario y digita tu contraseña.</p>
+
+      <label>Usuario</label>
+      <select id="loginUsuario">
+        <option value="">Cargando usuarios...</option>
+      </select>
+
+      <br>
+      <label>Contraseña</label>
+      <input type="password" id="loginClave" placeholder="Tu contraseña">
+
+      <br><br>
+      <button class="btn" style="width:100%" onclick="iniciarSesion()">Ingresar</button>
+      <div class="error-text" id="loginError"></div>
+    </div>
+  </section>
+
+  <div class="layout">
+    <aside>
+      <div class="logo">
+        <div class="logo-box">CI</div>
+        <div>
+          <h2>Control Interno</h2>
+          <span>Sistema de Monitoreo</span>
+        </div>
+      </div>
+      <div class="nav">
+        <button class="active" onclick="abrirModulo('inicio', this)">Inicio</button>
+        <button onclick="abrirModulo('mis', this)">Mis Actividades</button>
+        <button onclick="abrirModulo('todas', this)">Todas las Actividades</button>
+        <button onclick="abrirModulo('evidencias', this)">Evidencias</button>
+        <button onclick="abrirModulo('reportes', this)">Reportes</button>
+        <button onclick="abrirModulo('configuracion', this)">Configuración</button>
+      </div>
+    </aside>
+
+    <main>
+      <div class="topbar">
+        <div class="title">
+          <h1>Control Interno</h1>
+          <p>Seguimiento operativo de actividades, alertas y evidencias</p>
+          <div style="margin-top:10px;">
+            <button id="btnGenerarHoy" class="small-btn" style="display:none" onclick="ejecutarGeneracionManual()">
+              Generar actividades de hoy
+            </button>
+          </div>
+        </div>
+
+        <div class="user-card">
+          <div class="avatar" id="avatar">U</div>
+          <div>
+            <strong id="usuarioNombre">Usuario</strong><br>
+            <small id="usuarioCorreo">Cargando...</small>
+          </div>
+          <button class="small-btn" style="margin-left:8px" onclick="cerrarSesion()">Salir</button>
+        </div>
+      </div>
+
+      <div class="cards">
+        <div class="card kpi"><div><strong id="kPendientes">0</strong><br><span>Pendientes</span></div><div>📋</div></div>
+        <div class="card kpi"><div><strong id="kVencidas">0</strong><br><span>Vencidas</span></div><div>⏰</div></div>
+        <div class="card kpi"><div><strong id="kHoy">0</strong><br><span>Para hoy</span></div><div>📅</div></div>
+        <div class="card kpi"><div><strong id="kCompletadas">0</strong><br><span>Completadas</span></div><div>✅</div></div>
+      </div>
+
+      <div class="filters">
+        <div><label>Área</label><select id="fArea"></select></div>
+        <div><label>Frecuencia</label><select id="fFrecuencia"></select></div>
+        <div>
+          <label>Estado</label>
+          <select id="fEstado">
+            <option value="">Todos</option>
+            <option>Pendiente</option>
+            <option>Realizado</option>
+            <option>Vencido</option>
+            <option>En ejecución</option>
+          </select>
+        </div>
+        <div><label>Responsable</label><select id="fResponsable"></select></div>
+        <div><label>Buscar actividad</label><input id="fTexto" placeholder="Ej: Arqueo de caja"></div>
+        <div style="display:flex;align-items:end;gap:8px">
+          <button class="btn" onclick="aplicarFiltros()">Filtrar</button>
+          <button class="btn secondary" onclick="limpiarFiltros()">Limpiar</button>
+        </div>
+      </div>
+
+      <div class="tabs">
+        <button class="tab active" onclick="filtrarRapido('pendientes', this)">Pendientes</button>
+        <button class="tab" onclick="filtrarRapido('vencidas', this)">Vencidas</button>
+        <button class="tab" onclick="filtrarRapido('hoy', this)">Hoy</button>
+        <button class="tab" onclick="filtrarRapido('todas', this)">Todas</button>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Actividad</th>
+              <th>Área</th>
+              <th>Frecuencia</th>
+              <th>Fecha Programada</th>
+              <th>Prioridad</th>
+              <th>Estado</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody id="tbody">
+            <tr><td colspan="7" class="empty">Cargando actividades...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </main>
+  </div>
+
+  <div class="modal" id="modal">
+    <div class="modal-content">
+      <h2 id="mTitulo">Registrar actividad</h2>
+      <input type="hidden" id="mIdRegistro">
+
+      <div class="grid2">
+        <div>
+          <label>Estado</label>
+          <select id="mEstado">
+            <option>Realizado</option>
+            <option>En ejecución</option>
+            <option>Pendiente</option>
+          </select>
+        </div>
+        <div>
+          <label>% Avance</label>
+          <input type="number" id="mAvance" value="100" min="0" max="100">
+        </div>
+      </div>
+
+      <br>
+      <label>Observación</label>
+      <textarea id="mObservacion" rows="4" placeholder="Describe brevemente qué se realizó..."></textarea>
+
+      <br><br>
+      <label>Evidencia Drive</label>
+      <input type="file" id="mArchivo">
+      <p id="mInfoEvidencia" style="font-size:13px;color:#5d7478"></p>
+
+      <br>
+      <div style="display:flex;justify-content:flex-end;gap:10px">
+        <button class="btn secondary" onclick="cerrarModal()">Cancelar</button>
+        <button class="btn" id="btnGuardar" onclick="guardarActividad()">Guardar</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let actividades = [];
+    let actividadesFiltradas = [];
+    let tareaActual = null;
+    let usuarioSesion = null;
+    let moduloActual = "inicio";
+
+    function cargarUsuarios(){
+      google.script.run
+        .withSuccessHandler(usuarios => {
+          const sel = document.getElementById("loginUsuario");
+          sel.innerHTML = '<option value="">Selecciona...</option>';
+
+          if (!usuarios.length) {
+            sel.innerHTML = '<option value="">No hay usuarios activos</option>';
+            return;
+          }
+
+          usuarios.forEach(u => {
+            sel.innerHTML += `<option>${escapeHtml(u)}</option>`;
+          });
+        })
+        .withFailureHandler(err => {
+          document.getElementById("loginError").innerText = "Error cargando usuarios: " + err.message;
+        })
+        .getUsuariosActivos();
+    }
+
+    function iniciarSesion(){
+      const usuario = (document.getElementById("loginUsuario").value || "").trim();
+      const clave = document.getElementById("loginClave").value || "";
+      const errorBox = document.getElementById("loginError");
+      errorBox.innerText = "";
+
+      if (!usuario || !clave) {
+        errorBox.innerText = "Debes seleccionar usuario y contraseña.";
+        return;
+      }
+
+      google.script.run
+        .withSuccessHandler(resp => {
+          usuarioSesion = resp.usuario;
+          document.getElementById("usuarioNombre").innerText = resp.usuario.nombre || "Usuario";
+          document.getElementById("usuarioCorreo").innerText = resp.usuario.correo || "Sin correo";
+          document.getElementById("avatar").innerText = (resp.usuario.nombre || "U").substring(0,1).toUpperCase();
+          document.getElementById("loginScreen").style.display = "none";
+          document.querySelector(".layout").style.display = "grid";
+          cargarDatos();
+        })
+        .withFailureHandler(err => {
+          errorBox.innerText = err.message || "No fue posible iniciar sesión.";
+        })
+        .autenticarUsuario({ usuario, clave });
+    }
+
+    function cerrarSesion(){
+      usuarioSesion = null;
+      document.getElementById("loginClave").value = "";
+      document.getElementById("loginUsuario").value = "";
+      document.getElementById("loginError").innerText = "";
+      document.querySelector(".layout").style.display = "none";
+      document.getElementById("loginScreen").style.display = "flex";
+    }
+
+    function abrirModulo(modulo, btn){
+      moduloActual = modulo;
+      document.querySelectorAll(".nav button").forEach(b => b.classList.remove("active"));
+      if (btn) btn.classList.add("active");
+
+      if (modulo === "inicio" || modulo === "todas") {
+        actividadesFiltradas = actividades;
+        renderTabla(actividadesFiltradas);
+        return;
+      }
+
+      if (modulo === "mis") {
+        if (!usuarioSesion) return;
+        const u = normalizarTexto(usuarioSesion.nombre);
+        actividadesFiltradas = actividades.filter(a => {
+          const r = normalizarTexto(a.Responsable);
+          return !r || r === u;
+        });
+        renderTabla(actividadesFiltradas);
+        return;
+      }
+
+      document.getElementById("tbody").innerHTML =
+        `<tr><td colspan="7" class="empty">Módulo "${escapeHtml(modulo)}" en construcción.</td></tr>`;
+    }
+
+    function cargarDatos(){
+      google.script.run
+        .withSuccessHandler(renderInicial)
+        .withFailureHandler(err => {
+          document.getElementById("usuarioNombre").innerText = usuarioSesion?.nombre || "Usuario";
+          document.getElementById("usuarioCorreo").innerText = usuarioSesion?.correo || "Sin correo";
+          mostrarError("Error cargando datos: " + err.message);
+        })
+        .getDashboardData(usuarioSesion);
+    }
+
+    function renderInicial(data){
+      actividades = data.actividades || [];
+      actividadesFiltradas = actividades;
+
+      document.getElementById("usuarioNombre").innerText = data.usuario.nombre || "Usuario";
+      document.getElementById("usuarioCorreo").innerText = data.usuario.correo || "Sin correo";
+      document.getElementById("avatar").innerText = (data.usuario.nombre || "U").substring(0,1).toUpperCase();
+      document.getElementById("btnGenerarHoy").style.display = data.usuario.rol === "Jefe" ? "inline-block" : "none";
+
+      llenarSelect("fArea", data.areas || []);
+      llenarSelect("fFrecuencia", data.frecuencias || []);
+      llenarSelect("fResponsable", data.responsables || []);
+
+      actualizarKPIs();
+      renderTabla(actividadesFiltradas);
+      abrirModulo(moduloActual);
+    }
+
+    function ejecutarGeneracionManual(){
+      if (!usuarioSesion || usuarioSesion.rol !== "Jefe") {
+        alert("Solo el rol Jefe puede ejecutar esta acción.");
+        return;
+      }
+
+      const btn = document.getElementById("btnGenerarHoy");
+      const textoOriginal = btn.innerText;
+      btn.disabled = true;
+      btn.innerText = "Generando...";
+
+      google.script.run
+        .withSuccessHandler(resp => {
+          alert(resp.mensaje || "Generación finalizada.");
+          cargarDatos();
+          btn.disabled = false;
+          btn.innerText = textoOriginal;
+        })
+        .withFailureHandler(err => {
+          alert("Error generando actividades: " + err.message);
+          btn.disabled = false;
+          btn.innerText = textoOriginal;
+        })
+        .generarActividadesHoyManual(usuarioSesion);
+    }
+
+    function llenarSelect(id, valores){
+      const sel = document.getElementById(id);
+      sel.innerHTML = `<option value="">Todos</option>`;
+      (valores || []).forEach(v => {
+        if(v) sel.innerHTML += `<option>${escapeHtml(v)}</option>`;
+      });
+    }
+
+    function actualizarKPIs(){
+      const hoy = new Date();
+      hoy.setHours(0,0,0,0);
+
+      const pendientes = actividades.filter(a => a.Estado !== "Realizado").length;
+      const vencidas = actividades.filter(a => new Date(a.Fecha_Programada) < hoy && a.Estado !== "Realizado").length;
+      const paraHoy = actividades.filter(a => sameDay(new Date(a.Fecha_Programada), hoy) && a.Estado !== "Realizado").length;
+      const completadas = actividades.filter(a => a.Estado === "Realizado").length;
+
+      kPendientes.innerText = pendientes;
+      kVencidas.innerText = vencidas;
+      kHoy.innerText = paraHoy;
+      kCompletadas.innerText = completadas;
+    }
+
+    function renderTabla(data){
+      const tbody = document.getElementById("tbody");
+      tbody.innerHTML = "";
+
+      if(!data.length){
+        tbody.innerHTML = `<tr><td colspan="7" class="empty">Sin actividades para mostrar</td></tr>`;
+        return;
+      }
+
+      data.forEach(a => {
+        const prioridadClass = String(a.Prioridad || "").toLowerCase();
+        const estadoClass = String(a.Estado || "").toLowerCase().replace(/\s+/g, "-");
+        const esVirtual = String(a.ID_Registro || "").startsWith("VIRT-");
+        const accion = esVirtual
+          ? `<small style="color:#5d7478">Primero genera actividades de hoy</small>`
+          : `<button class="small-btn" onclick='abrirModal(${JSON.stringify(a)})'>Registrar</button>`;
+
+        tbody.innerHTML += `
+          <tr>
+            <td><strong>${escapeHtml(a.Actividad || "")}</strong><br><small>${escapeHtml(a.ID_Registro || "")}</small></td>
+            <td>${escapeHtml(a.Area || "")}</td>
+            <td><span class="badge estado">${escapeHtml(a.Frecuencia || "")}</span></td>
+            <td>${escapeHtml(a.Fecha_Programada_Texto || "")}</td>
+            <td><span class="badge ${prioridadClass}">${escapeHtml(a.Prioridad || "")}</span></td>
+            <td><span class="badge estado ${estadoClass}">${escapeHtml(a.Estado || "")}</span></td>
+            <td>
+              <div class="actions">
+                ${accion}
+              </div>
+            </td>
+          </tr>`;
+      });
+    }
+
+    function aplicarFiltros(){
+      const area = fArea.value;
+      const frecuencia = fFrecuencia.value;
+      const estado = fEstado.value;
+      const responsable = fResponsable.value;
+      const texto = (fTexto.value || "").toLowerCase().trim();
+
+      actividadesFiltradas = actividades.filter(a =>
+        (!area || a.Area === area) &&
+        (!frecuencia || a.Frecuencia === frecuencia) &&
+        (!estado || a.Estado === estado) &&
+        (!responsable || a.Responsable === responsable) &&
+        (!texto || String(a.Actividad || "").toLowerCase().includes(texto))
+      );
+
+      renderTabla(actividadesFiltradas);
+    }
+
+    function limpiarFiltros(){
+      fArea.value = "";
+      fFrecuencia.value = "";
+      fEstado.value = "";
+      fResponsable.value = "";
+      fTexto.value = "";
+      actividadesFiltradas = actividades;
+      renderTabla(actividadesFiltradas);
+    }
+
+    function filtrarRapido(tipo, btn){
+      document.querySelectorAll(".tab").forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
+
+      const hoy = new Date();
+      hoy.setHours(0,0,0,0);
+
+      if(tipo === "pendientes") {
+        actividadesFiltradas = actividades.filter(a => a.Estado !== "Realizado");
+      } else if(tipo === "vencidas") {
+        actividadesFiltradas = actividades.filter(a => new Date(a.Fecha_Programada) < hoy && a.Estado !== "Realizado");
+      } else if(tipo === "hoy") {
+        actividadesFiltradas = actividades.filter(a => sameDay(new Date(a.Fecha_Programada), hoy));
+      } else {
+        actividadesFiltradas = actividades;
+      }
+
+      renderTabla(actividadesFiltradas);
+    }
+
+    function abrirModal(a){
+      tareaActual = a;
+      mIdRegistro.value = a.ID_Registro;
+      mTitulo.innerText = a.Actividad || "Registrar actividad";
+      mEstado.value = "Realizado";
+      mAvance.value = 100;
+      mObservacion.value = "";
+      mArchivo.value = "";
+
+      mInfoEvidencia.innerText = normalizarTexto(a.Requiere_Evidencia) === "si"
+        ? "Esta actividad requiere evidencia obligatoria."
+        : "Esta actividad no exige evidencia, pero puedes adjuntarla si deseas.";
+
+      modal.style.display = "flex";
+    }
+
+    function cerrarModal(){
+      modal.style.display = "none";
+    }
+
+    function guardarActividad(){
+      const archivo = document.getElementById("mArchivo").files[0];
+      const requiereEvidencia = tareaActual && normalizarTexto(tareaActual.Requiere_Evidencia) === "si";
+
+      const avance = Number(mAvance.value);
+      if (Number.isNaN(avance) || avance < 0 || avance > 100) {
+        alert("El porcentaje de avance debe estar entre 0 y 100.");
+        return;
+      }
+
+      if(requiereEvidencia && !archivo){
+        alert("Esta actividad requiere evidencia. Adjunta un archivo.");
+        return;
+      }
+
+      const payload = {
+        idRegistro: mIdRegistro.value,
+        estado: mEstado.value,
+        avance: avance,
+        observacion: mObservacion.value,
+        archivoBase64: "",
+        archivoNombre: "",
+        archivoMime: ""
+      };
+
+      bloquearGuardado(true);
+
+      if(archivo){
+        const reader = new FileReader();
+        reader.onload = function(e){
+          payload.archivoBase64 = e.target.result.split(",")[1];
+          payload.archivoNombre = archivo.name;
+          payload.archivoMime = archivo.type;
+          enviarGuardado(payload);
+        };
+        reader.onerror = function(){
+          bloquearGuardado(false);
+          mostrarError("No se pudo leer el archivo de evidencia.");
+        };
+        reader.readAsDataURL(archivo);
+      } else {
+        enviarGuardado(payload);
+      }
+    }
+
+    function enviarGuardado(payload){
+      google.script.run
+        .withSuccessHandler(() => {
+          alert("Actividad actualizada correctamente.");
+          cerrarModal();
+          cargarDatos();
+          bloquearGuardado(false);
+        })
+        .withFailureHandler(err => {
+          bloquearGuardado(false);
+          mostrarError("Error guardando actividad: " + err.message);
+        })
+        .actualizarActividad(payload);
+    }
+
+    function bloquearGuardado(bloquear){
+      const btn = document.getElementById("btnGuardar");
+      btn.disabled = bloquear;
+      btn.innerText = bloquear ? "Guardando..." : "Guardar";
+    }
+
+    function mostrarError(msg){
+      alert(msg);
+      document.getElementById("tbody").innerHTML = `<tr><td colspan="7" class="empty">${escapeHtml(msg)}</td></tr>`;
+    }
+
+    function sameDay(a,b){
+      return a.getFullYear() === b.getFullYear() && a.getMonth() === b.getMonth() && a.getDate() === b.getDate();
+    }
+
+    function normalizarTexto(valor){
+      return String(valor || "")
+        .toLowerCase()
+        .trim()
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "");
+    }
+
+    function escapeHtml(str){
+      return String(str || "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/\"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
+
+    cargarUsuarios();
+  </script>
+</body>
+</html>
