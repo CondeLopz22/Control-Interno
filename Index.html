@@ -21,8 +21,7 @@
 
     body::before{
       content:"";
-      position:fixed;
-      inset:0;
+      position:fixed;inset:0;
       background:
         radial-gradient(circle at 85% 12%, rgba(92,212,212,.35), transparent 28%),
         radial-gradient(circle at 5% 95%, rgba(29,148,154,.28), transparent 35%),
@@ -57,15 +56,28 @@
     .kpi strong{font-size:34px;color:var(--primary)}
     .kpi span{color:#526b70;font-size:14px}
 
+    /* ── filtros dashboard (operativos) ── */
     .filters{background:white;border-radius:22px;padding:22px;display:grid;grid-template-columns:repeat(6,1fr);gap:16px;margin-bottom:22px;box-shadow:0 12px 28px rgba(0,0,0,.08)}
+
+    /* ── panel de búsqueda lazy (Todas) ── */
+    .search-panel{background:white;border-radius:22px;padding:24px;margin-bottom:22px;box-shadow:0 12px 28px rgba(0,0,0,.08)}
+    .search-panel h3{margin:0 0 18px;color:#08777f;font-size:18px;font-weight:700}
+    .search-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+    .search-row{display:grid;grid-template-columns:repeat(4,1fr) auto;gap:14px;margin-top:14px;align-items:end}
+
+    .result-info{background:#f0fbfb;border:1px solid rgba(29,148,154,.2);border-radius:14px;padding:12px 18px;margin-bottom:14px;font-size:13px;color:#07545b;display:flex;justify-content:space-between;align-items:center}
+    .result-info strong{color:var(--primary)}
+    .truncado-warn{color:var(--warning);font-weight:700}
+
     label{display:block;font-size:13px;margin-bottom:6px;font-weight:700;color:#07545b}
     select,input,textarea{width:100%;border:1px solid #cce4e5;border-radius:12px;padding:12px;background:white;color:#163f45;outline:none}
 
     .btn{border:0;background:var(--primary);color:white;padding:12px 18px;border-radius:12px;cursor:pointer;font-weight:700;box-shadow:0 8px 18px rgba(29,148,154,.25)}
     .btn.secondary{background:#e9f8f8;color:#07545b;box-shadow:none}
     .btn:disabled{opacity:.7;cursor:not-allowed}
+    .btn.danger{background:#b70000}
 
-    .tabs{display:flex;gap:10px;margin-bottom:14px}
+    .tabs{display:flex;gap:10px;margin-bottom:14px;flex-wrap:wrap}
     .tab{border:0;border-radius:12px;padding:12px 20px;cursor:pointer;font-weight:700;background:#e9f8f8;color:#07545b}
     .tab.active{background:var(--primary);color:white}
 
@@ -81,8 +93,9 @@
     .estado{background:#e2f4ff;color:#0071aa}
     .estado.realizado{background:#e6f8e6;color:var(--ok)}
     .estado.vencido{background:#ffe5e5;color:var(--danger)}
+    .estado.en-ejecucion,.estado.en-ejecución{background:#fff3d7;color:var(--warning)}
 
-    .actions{display:flex;gap:8px}
+    .actions{display:flex;gap:8px;flex-wrap:wrap}
     .small-btn{border:0;background:#e8f8f8;color:#07545b;border-radius:10px;padding:8px 10px;cursor:pointer;font-weight:700}
 
     .modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.35);align-items:center;justify-content:center;padding:20px;z-index:10}
@@ -92,36 +105,30 @@
     .grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
     .empty{text-align:center;padding:35px;color:#5d7478}
 
-    .login-screen{
-      min-height:100vh;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      padding:20px;
-    }
+    /* loading spinner */
+    .spinner{display:inline-block;width:18px;height:18px;border:3px solid rgba(255,255,255,.4);border-top-color:white;border-radius:50%;animation:spin .7s linear infinite;vertical-align:middle;margin-right:8px}
+    @keyframes spin{to{transform:rotate(360deg)}}
 
-    .login-card{
-      width:420px;
-      max-width:100%;
-      background:rgba(255,255,255,.92);
-      border-radius:24px;
-      padding:28px;
-      box-shadow:0 12px 28px rgba(0,0,0,.12);
-      border:1px solid rgba(29,148,154,.2);
-    }
-
+    .login-screen{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px}
+    .login-card{width:420px;max-width:100%;background:rgba(255,255,255,.92);border-radius:24px;padding:28px;box-shadow:0 12px 28px rgba(0,0,0,.12);border:1px solid rgba(29,148,154,.2)}
     .login-card h2{margin:0 0 8px;color:#08777f}
     .login-card p{margin:0 0 18px;color:#5d7478}
     .error-text{color:#b70000;font-size:13px;min-height:20px;margin-top:8px}
 
-    @media(max-width:1000px){.layout{grid-template-columns:1fr}aside{display:none}.cards{grid-template-columns:1fr 1fr}.filters{grid-template-columns:1fr 1fr}}
-    @media(max-width:650px){main{padding:24px 16px 90px}.cards,.filters{grid-template-columns:1fr}.topbar{display:block}table{font-size:12px}th:nth-child(3),td:nth-child(3),th:nth-child(4),td:nth-child(4){display:none}}
+    /* estado vacío búsqueda */
+    .search-empty{background:rgba(255,255,255,.7);border-radius:22px;padding:48px;text-align:center;color:#5d7478}
+    .search-empty .icon{font-size:48px;margin-bottom:12px}
+    .search-empty p{margin:0;font-size:15px}
+
+    @media(max-width:1000px){.layout{grid-template-columns:1fr}aside{display:none}.cards{grid-template-columns:1fr 1fr}.filters,.search-grid,.search-row{grid-template-columns:1fr 1fr}}
+    @media(max-width:650px){main{padding:24px 16px 90px}.cards{grid-template-columns:1fr}.topbar{display:block}table{font-size:12px}th:nth-child(3),td:nth-child(3),th:nth-child(4),td:nth-child(4){display:none}.search-grid,.search-row{grid-template-columns:1fr}}
   </style>
 </head>
 <body>
   <div class="wave-top"></div>
   <div class="wave-bottom"></div>
 
+  <!-- ── LOGIN ─────────────────────────────────────────── -->
   <section class="login-screen" id="loginScreen">
     <div class="login-card">
       <h2>Ingreso al sistema</h2>
@@ -142,6 +149,7 @@
     </div>
   </section>
 
+  <!-- ── APP ───────────────────────────────────────────── -->
   <div class="layout">
     <aside>
       <div class="logo">
@@ -152,27 +160,22 @@
         </div>
       </div>
       <div class="nav">
-        <button class="active" onclick="abrirModulo('inicio', this)">Inicio</button>
-        <button onclick="abrirModulo('mis', this)">Mis Actividades</button>
-        <button onclick="abrirModulo('todas', this)">Todas las Actividades</button>
-        <button onclick="abrirModulo('evidencias', this)">Evidencias</button>
-        <button onclick="abrirModulo('reportes', this)">Reportes</button>
-        <button onclick="abrirModulo('configuracion', this)">Configuración</button>
+        <button class="active" onclick="abrirModulo('inicio', this)">🏠 Inicio</button>
+        <button onclick="abrirModulo('mis', this)">👤 Mis Actividades</button>
+        <button onclick="abrirModulo('todas', this)">🗂️ Todas las Actividades</button>
+        <button onclick="abrirModulo('evidencias', this)">📎 Evidencias</button>
+        <button onclick="abrirModulo('reportes', this)">📊 Reportes</button>
+        <button onclick="abrirModulo('configuracion', this)">⚙️ Configuración</button>
       </div>
     </aside>
 
-    <main>
+    <main id="mainArea">
+      <!-- topbar -->
       <div class="topbar">
         <div class="title">
-          <h1>Control Interno</h1>
-          <p>Seguimiento operativo de actividades, alertas y evidencias</p>
-          <div style="margin-top:10px;">
-            <button id="btnGenerarHoy" class="small-btn" style="display:none" onclick="ejecutarGeneracionManual()">
-              Generar actividades de hoy
-            </button>
-          </div>
+          <h1 id="mainTitle">Control Interno</h1>
+          <p id="mainSubtitle">Actividades operativas · vencidas, hoy y próximos 7 días</p>
         </div>
-
         <div class="user-card">
           <div class="avatar" id="avatar">U</div>
           <div>
@@ -183,62 +186,155 @@
         </div>
       </div>
 
-      <div class="cards">
+      <!-- KPIs -->
+      <div class="cards" id="kpiSection">
         <div class="card kpi"><div><strong id="kPendientes">0</strong><br><span>Pendientes</span></div><div>📋</div></div>
         <div class="card kpi"><div><strong id="kVencidas">0</strong><br><span>Vencidas</span></div><div>⏰</div></div>
         <div class="card kpi"><div><strong id="kHoy">0</strong><br><span>Para hoy</span></div><div>📅</div></div>
-        <div class="card kpi"><div><strong id="kCompletadas">0</strong><br><span>Completadas</span></div><div>✅</div></div>
+        <div class="card kpi"><div><strong id="kCompletadas">0</strong><br><span>Completadas mes</span></div><div>✅</div></div>
       </div>
 
-      <div class="filters">
-        <div><label>Área</label><select id="fArea"></select></div>
-        <div><label>Frecuencia</label><select id="fFrecuencia"></select></div>
-        <div>
-          <label>Estado</label>
-          <select id="fEstado">
-            <option value="">Todos</option>
-            <option>Pendiente</option>
-            <option>Realizado</option>
-            <option>Vencido</option>
-            <option>En ejecución</option>
-          </select>
+      <!-- ══════ SECCIÓN OPERATIVA (inicio / mis / evidencias) ══════ -->
+      <div id="seccionOperativa">
+        <div class="filters" id="filtersBar">
+          <div><label>Área</label><select id="fArea"></select></div>
+          <div><label>Frecuencia</label><select id="fFrecuencia"></select></div>
+          <div>
+            <label>Estado</label>
+            <select id="fEstado">
+              <option value="">Todos</option>
+              <option>Pendiente</option>
+              <option>Realizado</option>
+              <option>Vencido</option>
+              <option>En ejecución</option>
+            </select>
+          </div>
+          <div><label>Responsable</label><select id="fResponsable"></select></div>
+          <div><label>Buscar actividad</label><input id="fTexto" placeholder="Ej: facturación"></div>
+          <div style="display:flex;align-items:end;gap:8px">
+            <button class="btn" onclick="aplicarFiltros()">Filtrar</button>
+            <button class="btn secondary" onclick="limpiarFiltros()">Limpiar</button>
+          </div>
         </div>
-        <div><label>Responsable</label><select id="fResponsable"></select></div>
-        <div><label>Buscar actividad</label><input id="fTexto" placeholder="Ej: Arqueo de caja"></div>
-        <div style="display:flex;align-items:end;gap:8px">
-          <button class="btn" onclick="aplicarFiltros()">Filtrar</button>
-          <button class="btn secondary" onclick="limpiarFiltros()">Limpiar</button>
+
+        <div class="tabs">
+          <button class="tab active" onclick="filtrarRapido('pendientes', this)">Pendientes</button>
+          <button class="tab" onclick="filtrarRapido('vencidas', this)">Vencidas</button>
+          <button class="tab" onclick="filtrarRapido('hoy', this)">Hoy</button>
+          <button class="tab" onclick="filtrarRapido('todas', this)">Todas operativas</button>
         </div>
-      </div>
 
-      <div class="tabs">
-        <button class="tab active" onclick="filtrarRapido('pendientes', this)">Pendientes</button>
-        <button class="tab" onclick="filtrarRapido('vencidas', this)">Vencidas</button>
-        <button class="tab" onclick="filtrarRapido('hoy', this)">Hoy</button>
-        <button class="tab" onclick="filtrarRapido('todas', this)">Todas</button>
-      </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Actividad</th>
+                <th>Área</th>
+                <th>Frecuencia</th>
+                <th>Fecha Programada</th>
+                <th>Prioridad</th>
+                <th>Estado</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody id="tbody">
+              <tr><td colspan="7" class="empty">Cargando actividades...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div><!-- /seccionOperativa -->
 
-      <div class="table-wrap">
-        <table>
-          <thead>
-            <tr>
-              <th>Actividad</th>
-              <th>Área</th>
-              <th>Frecuencia</th>
-              <th>Fecha Programada</th>
-              <th>Prioridad</th>
-              <th>Estado</th>
-              <th>Acciones</th>
-            </tr>
-          </thead>
-          <tbody id="tbody">
-            <tr><td colspan="7" class="empty">Cargando actividades...</td></tr>
-          </tbody>
-        </table>
-      </div>
+      <!-- ══════ SECCIÓN LAZY: TODAS LAS ACTIVIDADES ══════ -->
+      <div id="seccionTodas" style="display:none">
+        <div class="search-panel">
+          <h3>🔍 Buscar en Cronograma Anual</h3>
+          <div class="search-grid">
+            <div>
+              <label>Área</label>
+              <input id="sArea" placeholder="Ej: Facturación">
+            </div>
+            <div>
+              <label>Responsable</label>
+              <input id="sResponsable" placeholder="Nombre responsable">
+            </div>
+            <div>
+              <label>Frecuencia</label>
+              <select id="sFrecuencia">
+                <option value="">Todas</option>
+                <option>Diaria</option>
+                <option>Semanal</option>
+                <option>Quincenal</option>
+                <option>Mensual</option>
+                <option>Bimestral</option>
+                <option>Trimestral</option>
+                <option>Semestral</option>
+                <option>Anual</option>
+              </select>
+            </div>
+            <div>
+              <label>Estado</label>
+              <select id="sEstado">
+                <option value="">Todos</option>
+                <option>Pendiente</option>
+                <option>Realizado</option>
+                <option>Vencido</option>
+                <option>En ejecución</option>
+              </select>
+            </div>
+          </div>
+          <div class="search-row">
+            <div>
+              <label>Mes</label>
+              <select id="sMes">
+                <option value="">Todos los meses</option>
+                <option value="01">Enero</option>
+                <option value="02">Febrero</option>
+                <option value="03">Marzo</option>
+                <option value="04">Abril</option>
+                <option value="05">Mayo</option>
+                <option value="06">Junio</option>
+                <option value="07">Julio</option>
+                <option value="08">Agosto</option>
+                <option value="09">Septiembre</option>
+                <option value="10">Octubre</option>
+                <option value="11">Noviembre</option>
+                <option value="12">Diciembre</option>
+              </select>
+            </div>
+            <div>
+              <label>Periodo</label>
+              <input id="sPeriodo" placeholder="Ej: Q1 2025">
+            </div>
+            <div style="grid-column:span 2">
+              <label>Buscar texto en actividad</label>
+              <input id="sTexto" placeholder="Ej: capacitación, auditoría...">
+            </div>
+            <div style="display:flex;align-items:end;gap:8px">
+              <button class="btn" id="btnBuscar" onclick="buscarCronograma()">
+                Buscar
+              </button>
+              <button class="btn secondary" onclick="limpiarBusqueda()">Limpiar</button>
+            </div>
+          </div>
+        </div>
+
+        <div id="resultInfo" style="display:none" class="result-info">
+          <span>Mostrando <strong id="resultCount">0</strong> de <strong id="resultTotal">0</strong> registros encontrados</span>
+          <span id="truncadoMsg" class="truncado-warn" style="display:none">⚠️ Se muestran solo los primeros 200 resultados. Refina los filtros para mayor precisión.</span>
+        </div>
+
+        <div id="searchResultArea">
+          <div class="search-empty">
+            <div class="icon">🗂️</div>
+            <p>Ingresa los filtros y haz clic en <strong>Buscar</strong> para consultar el cronograma anual.</p>
+          </div>
+        </div>
+      </div><!-- /seccionTodas -->
+
     </main>
   </div>
 
+  <!-- ── MODAL REGISTRO ─────────────────────────────────── -->
   <div class="modal" id="modal">
     <div class="modal-content">
       <h2 id="mTitulo">Registrar actividad</h2>
@@ -277,26 +373,24 @@
   </div>
 
   <script>
-    let actividades = [];
-    let actividadesFiltradas = [];
-    let tareaActual = null;
-    let usuarioSesion = null;
-    let moduloActual = "inicio";
+    /* ── Estado global ──────────────────────────────────── */
+    let actividades         = [];   // operativas (dashboard)
+    let actividadesFiltradas= [];
+    let tareaActual         = null;
+    let usuarioSesion       = null;
+    let moduloActual        = "inicio";
 
+    /* ── LOGIN ──────────────────────────────────────────── */
     function cargarUsuarios(){
       google.script.run
         .withSuccessHandler(usuarios => {
           const sel = document.getElementById("loginUsuario");
           sel.innerHTML = '<option value="">Selecciona...</option>';
-
-          if (!usuarios.length) {
+          if (!usuarios.length){
             sel.innerHTML = '<option value="">No hay usuarios activos</option>';
             return;
           }
-
-          usuarios.forEach(u => {
-            sel.innerHTML += `<option>${escapeHtml(u)}</option>`;
-          });
+          usuarios.forEach(u => sel.innerHTML += `<option>${escapeHtml(u)}</option>`);
         })
         .withFailureHandler(err => {
           document.getElementById("loginError").innerText = "Error cargando usuarios: " + err.message;
@@ -305,12 +399,12 @@
     }
 
     function iniciarSesion(){
-      const usuario = (document.getElementById("loginUsuario").value || "").trim();
-      const clave = document.getElementById("loginClave").value || "";
+      const usuario  = (document.getElementById("loginUsuario").value || "").trim();
+      const clave    = document.getElementById("loginClave").value || "";
       const errorBox = document.getElementById("loginError");
       errorBox.innerText = "";
 
-      if (!usuario || !clave) {
+      if (!usuario || !clave){
         errorBox.innerText = "Debes seleccionar usuario y contraseña.";
         return;
       }
@@ -318,11 +412,9 @@
       google.script.run
         .withSuccessHandler(resp => {
           usuarioSesion = resp.usuario;
-          document.getElementById("usuarioNombre").innerText = resp.usuario.nombre || "Usuario";
-          document.getElementById("usuarioCorreo").innerText = resp.usuario.correo || "Sin correo";
-          document.getElementById("avatar").innerText = (resp.usuario.nombre || "U").substring(0,1).toUpperCase();
           document.getElementById("loginScreen").style.display = "none";
-          document.querySelector(".layout").style.display = "grid";
+          document.querySelector(".layout").style.display      = "grid";
+          actualizarHeaderUsuario(resp.usuario);
           cargarDatos();
         })
         .withFailureHandler(err => {
@@ -332,93 +424,52 @@
     }
 
     function cerrarSesion(){
-      usuarioSesion = null;
-      document.getElementById("loginClave").value = "";
+      usuarioSesion        = null;
+      actividades          = [];
+      actividadesFiltradas = [];
+      document.getElementById("loginClave").value   = "";
       document.getElementById("loginUsuario").value = "";
       document.getElementById("loginError").innerText = "";
-      document.querySelector(".layout").style.display = "none";
+      document.querySelector(".layout").style.display  = "none";
       document.getElementById("loginScreen").style.display = "flex";
     }
 
-    function abrirModulo(modulo, btn){
-      moduloActual = modulo;
-      document.querySelectorAll(".nav button").forEach(b => b.classList.remove("active"));
-      if (btn) btn.classList.add("active");
-
-      if (modulo === "inicio" || modulo === "todas") {
-        actividadesFiltradas = actividades;
-        renderTabla(actividadesFiltradas);
-        return;
-      }
-
-      if (modulo === "mis") {
-        if (!usuarioSesion) return;
-        const u = normalizarTexto(usuarioSesion.nombre);
-        actividadesFiltradas = actividades.filter(a => {
-          const r = normalizarTexto(a.Responsable);
-          return !r || r === u;
-        });
-        renderTabla(actividadesFiltradas);
-        return;
-      }
-
-      document.getElementById("tbody").innerHTML =
-        `<tr><td colspan="7" class="empty">Módulo "${escapeHtml(modulo)}" en construcción.</td></tr>`;
+    function actualizarHeaderUsuario(u){
+      document.getElementById("usuarioNombre").innerText = u.nombre || "Usuario";
+      document.getElementById("usuarioCorreo").innerText = u.correo  || "Sin correo";
+      document.getElementById("avatar").innerText = (u.nombre || "U").substring(0,1).toUpperCase();
     }
 
+    /* ── CARGA INICIAL (solo operativas) ────────────────── */
     function cargarDatos(){
+      document.getElementById("tbody").innerHTML =
+        `<tr><td colspan="7" class="empty">Consultando actividades operativas...</td></tr>`;
+
       google.script.run
         .withSuccessHandler(renderInicial)
-        .withFailureHandler(err => {
-          document.getElementById("usuarioNombre").innerText = usuarioSesion?.nombre || "Usuario";
-          document.getElementById("usuarioCorreo").innerText = usuarioSesion?.correo || "Sin correo";
-          mostrarError("Error cargando datos: " + err.message);
-        })
+        .withFailureHandler(err => mostrarError("Error cargando datos: " + err.message))
         .getDashboardData(usuarioSesion);
     }
 
     function renderInicial(data){
-      actividades = data.actividades || [];
+      actividades          = data.actividades || [];
       actividadesFiltradas = actividades;
 
-      document.getElementById("usuarioNombre").innerText = data.usuario.nombre || "Usuario";
-      document.getElementById("usuarioCorreo").innerText = data.usuario.correo || "Sin correo";
-      document.getElementById("avatar").innerText = (data.usuario.nombre || "U").substring(0,1).toUpperCase();
-      document.getElementById("btnGenerarHoy").style.display = data.usuario.rol === "Jefe" ? "inline-block" : "none";
+      actualizarHeaderUsuario(data.usuario);
 
-      llenarSelect("fArea", data.areas || []);
-      llenarSelect("fFrecuencia", data.frecuencias || []);
+      llenarSelect("fArea",        data.areas        || []);
+      llenarSelect("fFrecuencia",  data.frecuencias  || []);
       llenarSelect("fResponsable", data.responsables || []);
 
-      actualizarKPIs();
-      renderTabla(actividadesFiltradas);
-      abrirModulo(moduloActual);
-    }
-
-    function ejecutarGeneracionManual(){
-      if (!usuarioSesion || usuarioSesion.rol !== "Jefe") {
-        alert("Solo el rol Jefe puede ejecutar esta acción.");
-        return;
+      // KPIs desde el servidor (calculados sobre TODO el cronograma, no solo operativas)
+      if (data.kpis){
+        document.getElementById("kPendientes").innerText  = data.kpis.pendientes;
+        document.getElementById("kVencidas").innerText    = data.kpis.vencidas;
+        document.getElementById("kHoy").innerText         = data.kpis.hoy;
+        document.getElementById("kCompletadas").innerText = data.kpis.completadas;
       }
 
-      const btn = document.getElementById("btnGenerarHoy");
-      const textoOriginal = btn.innerText;
-      btn.disabled = true;
-      btn.innerText = "Generando...";
-
-      google.script.run
-        .withSuccessHandler(resp => {
-          alert(resp.mensaje || "Generación finalizada.");
-          cargarDatos();
-          btn.disabled = false;
-          btn.innerText = textoOriginal;
-        })
-        .withFailureHandler(err => {
-          alert("Error generando actividades: " + err.message);
-          btn.disabled = false;
-          btn.innerText = textoOriginal;
-        })
-        .generarActividadesHoyManual(usuarioSesion);
+      abrirModulo(moduloActual);
     }
 
     function llenarSelect(id, valores){
@@ -429,162 +480,311 @@
       });
     }
 
-    function actualizarKPIs(){
-      const hoy = new Date();
-      hoy.setHours(0,0,0,0);
+    /* ── MÓDULOS ────────────────────────────────────────── */
+    function abrirModulo(modulo, btn){
+      moduloActual = modulo;
 
-      const pendientes = actividades.filter(a => a.Estado !== "Realizado").length;
-      const vencidas = actividades.filter(a => new Date(a.Fecha_Programada) < hoy && a.Estado !== "Realizado").length;
-      const paraHoy = actividades.filter(a => sameDay(new Date(a.Fecha_Programada), hoy) && a.Estado !== "Realizado").length;
-      const completadas = actividades.filter(a => a.Estado === "Realizado").length;
+      document.querySelectorAll(".nav button").forEach(b => b.classList.remove("active"));
+      if (btn) btn.classList.add("active");
 
-      kPendientes.innerText = pendientes;
-      kVencidas.innerText = vencidas;
-      kHoy.innerText = paraHoy;
-      kCompletadas.innerText = completadas;
+      const esTodas = modulo === "todas";
+      document.getElementById("seccionOperativa").style.display = esTodas ? "none" : "block";
+      document.getElementById("seccionTodas").style.display     = esTodas ? "block" : "none";
+
+      if (modulo === "todas"){
+        document.getElementById("mainTitle").innerText    = "Todas las Actividades";
+        document.getElementById("mainSubtitle").innerText = "Búsqueda sobre cronograma anual completo";
+        return;
+      }
+
+      document.getElementById("mainTitle").innerText    = "Control Interno";
+      document.getElementById("mainSubtitle").innerText = "Actividades operativas · vencidas, hoy y próximos 7 días";
+
+      if (modulo === "inicio"){
+        filtrarRapidoSinBoton("pendientes");
+        return;
+      }
+
+      if (modulo === "mis"){
+        if (!usuarioSesion) return;
+        const u = normalizarTexto(usuarioSesion.nombre);
+        actividadesFiltradas = actividades.filter(a => {
+          const r = normalizarTexto(a.Responsable);
+          return !r || r === u;
+        });
+        renderTabla(actividadesFiltradas, "tbody");
+        return;
+      }
+
+      if (modulo === "evidencias"){
+        actividadesFiltradas = actividades.filter(a => a.Evidencia_Drive_URL);
+        renderTabla(actividadesFiltradas, "tbody");
+        return;
+      }
+
+      if (modulo === "reportes"){
+        actividadesFiltradas = actividades;
+        renderTabla(actividadesFiltradas, "tbody");
+        return;
+      }
+
+      document.getElementById("tbody").innerHTML =
+        `<tr><td colspan="7" class="empty">Módulo "${escapeHtml(modulo)}" en construcción.</td></tr>`;
     }
 
-    function renderTabla(data){
-      const tbody = document.getElementById("tbody");
+    /* ── FILTROS OPERATIVOS (dashboard) ─────────────────── */
+    function aplicarFiltros(){
+      const area        = document.getElementById("fArea").value;
+      const frecuencia  = document.getElementById("fFrecuencia").value;
+      const estado      = document.getElementById("fEstado").value;
+      const responsable = document.getElementById("fResponsable").value;
+      const texto       = (document.getElementById("fTexto").value || "").toLowerCase().trim();
+
+      actividadesFiltradas = actividades.filter(a =>
+        (!area        || a.Area        === area)        &&
+        (!frecuencia  || a.Frecuencia  === frecuencia)  &&
+        (!estado      || a.Estado      === estado)      &&
+        (!responsable || a.Responsable === responsable) &&
+        (!texto       || String(a.Actividad || "").toLowerCase().includes(texto))
+      );
+
+      renderTabla(actividadesFiltradas, "tbody");
+    }
+
+    function limpiarFiltros(){
+      ["fArea","fFrecuencia","fEstado","fResponsable"].forEach(id =>
+        document.getElementById(id).value = "");
+      document.getElementById("fTexto").value = "";
+      actividadesFiltradas = actividades;
+      renderTabla(actividadesFiltradas, "tbody");
+    }
+
+    function filtrarRapido(tipo, btn){
+      document.querySelectorAll(".tab").forEach(b => b.classList.remove("active"));
+      if (btn) btn.classList.add("active");
+      filtrarRapidoSinBoton(tipo);
+    }
+
+    function filtrarRapidoSinBoton(tipo){
+      const hoy = new Date(); hoy.setHours(0,0,0,0);
+
+      if (tipo === "pendientes"){
+        actividadesFiltradas = actividades.filter(a => {
+          const f = crearFechaLocal(a.Fecha_Programada);
+          return f && f <= hoy && a.Estado !== "Realizado";
+        });
+      } else if (tipo === "vencidas"){
+        actividadesFiltradas = actividades.filter(a => {
+          const f = crearFechaLocal(a.Fecha_Programada);
+          return f && f < hoy && a.Estado !== "Realizado";
+        });
+      } else if (tipo === "hoy"){
+        actividadesFiltradas = actividades.filter(a => {
+          const f = crearFechaLocal(a.Fecha_Programada);
+          return f && sameDay(f, hoy);
+        });
+      } else {
+        actividadesFiltradas = actividades;
+      }
+
+      renderTabla(actividadesFiltradas, "tbody");
+    }
+
+    /* ── BÚSQUEDA LAZY (Todas las Actividades) ──────────── */
+    function buscarCronograma(){
+      const filtros = {
+        area:        document.getElementById("sArea").value.trim(),
+        responsable: document.getElementById("sResponsable").value.trim(),
+        frecuencia:  document.getElementById("sFrecuencia").value,
+        estado:      document.getElementById("sEstado").value,
+        mes:         document.getElementById("sMes").value,
+        periodo:     document.getElementById("sPeriodo").value.trim(),
+        texto:       document.getElementById("sTexto").value.trim()
+      };
+
+      // Requiere al menos un filtro para evitar traer todo el cronograma
+      const hayFiltro = Object.values(filtros).some(v => v);
+      if (!hayFiltro){
+        alert("Ingresa al menos un criterio de búsqueda para consultar el cronograma anual.");
+        return;
+      }
+
+      const btn = document.getElementById("btnBuscar");
+      btn.disabled = true;
+      btn.innerHTML = `<span class="spinner"></span>Buscando...`;
+
+      document.getElementById("searchResultArea").innerHTML =
+        `<div class="search-empty"><div class="icon">⏳</div><p>Consultando cronograma anual...</p></div>`;
+      document.getElementById("resultInfo").style.display = "none";
+
+      google.script.run
+        .withSuccessHandler(resp => {
+          btn.disabled = false;
+          btn.innerHTML = "Buscar";
+          renderResultadosBusqueda(resp, filtros);
+        })
+        .withFailureHandler(err => {
+          btn.disabled = false;
+          btn.innerHTML = "Buscar";
+          document.getElementById("searchResultArea").innerHTML =
+            `<div class="search-empty"><div class="icon">❌</div><p>Error: ${escapeHtml(err.message)}</p></div>`;
+        })
+        .getCronogramaFiltrado(filtros, usuarioSesion);
+    }
+
+    function renderResultadosBusqueda(resp, filtros){
+      const lista    = resp.actividades || [];
+      const total    = resp.total       || 0;
+      const truncado = resp.truncado    || false;
+
+      // Info resultado
+      const infoEl = document.getElementById("resultInfo");
+      infoEl.style.display = "flex";
+      document.getElementById("resultCount").innerText = lista.length;
+      document.getElementById("resultTotal").innerText = total;
+      const truncMsg = document.getElementById("truncadoMsg");
+      truncMsg.style.display = truncado ? "inline" : "none";
+
+      if (!lista.length){
+        document.getElementById("searchResultArea").innerHTML =
+          `<div class="search-empty"><div class="icon">🔎</div><p>No se encontraron actividades con los filtros seleccionados.</p></div>`;
+        return;
+      }
+
+      const wrap = document.createElement("div");
+      wrap.className = "table-wrap";
+      wrap.innerHTML = `
+        <table>
+          <thead>
+            <tr>
+              <th>Actividad</th>
+              <th>Área</th>
+              <th>Frecuencia</th>
+              <th>Fecha Programada</th>
+              <th>Prioridad</th>
+              <th>Estado</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody id="tbodySearch"></tbody>
+        </table>`;
+
+      document.getElementById("searchResultArea").innerHTML = "";
+      document.getElementById("searchResultArea").appendChild(wrap);
+
+      renderTabla(lista, "tbodySearch");
+    }
+
+    function limpiarBusqueda(){
+      ["sArea","sResponsable","sPeriodo","sTexto"].forEach(id =>
+        document.getElementById(id).value = "");
+      ["sFrecuencia","sEstado","sMes"].forEach(id =>
+        document.getElementById(id).value = "");
+      document.getElementById("resultInfo").style.display = "none";
+      document.getElementById("searchResultArea").innerHTML = `
+        <div class="search-empty">
+          <div class="icon">🗂️</div>
+          <p>Ingresa los filtros y haz clic en <strong>Buscar</strong> para consultar el cronograma anual.</p>
+        </div>`;
+    }
+
+    /* ── RENDER TABLA (reutilizable) ─────────────────────── */
+    function renderTabla(data, tbodyId){
+      const tbody = document.getElementById(tbodyId);
+      if (!tbody) return;
       tbody.innerHTML = "";
 
-      if(!data.length){
+      if (!data.length){
         tbody.innerHTML = `<tr><td colspan="7" class="empty">Sin actividades para mostrar</td></tr>`;
         return;
       }
 
       data.forEach(a => {
-        const prioridadClass = String(a.Prioridad || "").toLowerCase();
-        const estadoClass = String(a.Estado || "").toLowerCase().replace(/\s+/g, "-");
-        const esVirtual = String(a.ID_Registro || "").startsWith("VIRT-");
-        const accion = esVirtual
-          ? `<small style="color:#5d7478">Primero genera actividades de hoy</small>`
-          : `<button class="small-btn" onclick='abrirModal(${JSON.stringify(a)})'>Registrar</button>`;
+        const prioridadClass = String(a.Prioridad || "Media").toLowerCase();
+        const estadoTexto    = String(a.Estado || "Pendiente");
+        const estadoClass    = normalizarTexto(estadoTexto).replace(/\s+/g, "-");
+        const fechaMostrar   = a.Fecha_Programada_Texto || "Sin fecha";
+        const periodoMostrar = a.Periodo ? `<br><small>${escapeHtml(a.Periodo)}</small>` : "";
+
+        const evidenciaBtn = a.Evidencia_Drive_URL
+          ? `<button class="small-btn" onclick="window.open('${a.Evidencia_Drive_URL}', '_blank')">Ver 📎</button>`
+          : "";
 
         tbody.innerHTML += `
           <tr>
-            <td><strong>${escapeHtml(a.Actividad || "")}</strong><br><small>${escapeHtml(a.ID_Registro || "")}</small></td>
+            <td>
+              <strong>${escapeHtml(a.Actividad || "")}</strong><br>
+              <small>${escapeHtml(a.ID_CRONOGRAMA || a.ID_Registro || "")}</small>
+            </td>
             <td>${escapeHtml(a.Area || "")}</td>
             <td><span class="badge estado">${escapeHtml(a.Frecuencia || "")}</span></td>
-            <td>${escapeHtml(a.Fecha_Programada_Texto || "")}</td>
-            <td><span class="badge ${prioridadClass}">${escapeHtml(a.Prioridad || "")}</span></td>
-            <td><span class="badge estado ${estadoClass}">${escapeHtml(a.Estado || "")}</span></td>
+            <td>${escapeHtml(fechaMostrar)}${periodoMostrar}</td>
+            <td><span class="badge ${prioridadClass}">${escapeHtml(a.Prioridad || "Media")}</span></td>
+            <td><span class="badge estado ${estadoClass}">${escapeHtml(estadoTexto)}</span></td>
             <td>
               <div class="actions">
-                ${accion}
+                <button class="small-btn" onclick='abrirModal(${JSON.stringify(a)})'>Registrar</button>
+                ${evidenciaBtn}
               </div>
             </td>
           </tr>`;
       });
     }
 
-    function aplicarFiltros(){
-      const area = fArea.value;
-      const frecuencia = fFrecuencia.value;
-      const estado = fEstado.value;
-      const responsable = fResponsable.value;
-      const texto = (fTexto.value || "").toLowerCase().trim();
-
-      actividadesFiltradas = actividades.filter(a =>
-        (!area || a.Area === area) &&
-        (!frecuencia || a.Frecuencia === frecuencia) &&
-        (!estado || a.Estado === estado) &&
-        (!responsable || a.Responsable === responsable) &&
-        (!texto || String(a.Actividad || "").toLowerCase().includes(texto))
-      );
-
-      renderTabla(actividadesFiltradas);
-    }
-
-    function limpiarFiltros(){
-      fArea.value = "";
-      fFrecuencia.value = "";
-      fEstado.value = "";
-      fResponsable.value = "";
-      fTexto.value = "";
-      actividadesFiltradas = actividades;
-      renderTabla(actividadesFiltradas);
-    }
-
-    function filtrarRapido(tipo, btn){
-      document.querySelectorAll(".tab").forEach(b => b.classList.remove("active"));
-      btn.classList.add("active");
-
-      const hoy = new Date();
-      hoy.setHours(0,0,0,0);
-
-      if(tipo === "pendientes") {
-        actividadesFiltradas = actividades.filter(a => a.Estado !== "Realizado");
-      } else if(tipo === "vencidas") {
-        actividadesFiltradas = actividades.filter(a => new Date(a.Fecha_Programada) < hoy && a.Estado !== "Realizado");
-      } else if(tipo === "hoy") {
-        actividadesFiltradas = actividades.filter(a => sameDay(new Date(a.Fecha_Programada), hoy));
-      } else {
-        actividadesFiltradas = actividades;
-      }
-
-      renderTabla(actividadesFiltradas);
-    }
-
+    /* ── MODAL ───────────────────────────────────────────── */
     function abrirModal(a){
       tareaActual = a;
-      mIdRegistro.value = a.ID_Registro;
-      mTitulo.innerText = a.Actividad || "Registrar actividad";
-      mEstado.value = "Realizado";
-      mAvance.value = 100;
-      mObservacion.value = "";
-      mArchivo.value = "";
-
-      mInfoEvidencia.innerText = normalizarTexto(a.Requiere_Evidencia) === "si"
-        ? "Esta actividad requiere evidencia obligatoria."
-        : "Esta actividad no exige evidencia, pero puedes adjuntarla si deseas.";
-
-      modal.style.display = "flex";
+      document.getElementById("mIdRegistro").value = a.ID_CRONOGRAMA || a.ID_Registro;
+      document.getElementById("mTitulo").innerText  = a.Actividad || "Registrar actividad";
+      document.getElementById("mEstado").value      = "Realizado";
+      document.getElementById("mAvance").value      = a.Porcentaje_Avance || 100;
+      document.getElementById("mObservacion").value = a.Observacion || "";
+      document.getElementById("mArchivo").value     = "";
+      document.getElementById("mInfoEvidencia").innerText =
+        normalizarTexto(a.Requiere_Evidencia) === "si"
+          ? "Esta actividad requiere evidencia obligatoria."
+          : "Esta actividad no exige evidencia, pero puedes adjuntarla si deseas.";
+      document.getElementById("modal").style.display = "flex";
     }
 
     function cerrarModal(){
-      modal.style.display = "none";
+      document.getElementById("modal").style.display = "none";
     }
 
     function guardarActividad(){
-      const archivo = document.getElementById("mArchivo").files[0];
-      const requiereEvidencia = tareaActual && normalizarTexto(tareaActual.Requiere_Evidencia) === "si";
+      const archivo          = document.getElementById("mArchivo").files[0];
+      const requiereEvidencia = tareaActual &&
+        normalizarTexto(tareaActual.Requiere_Evidencia) === "si";
+      const avance           = Number(document.getElementById("mAvance").value);
 
-      const avance = Number(mAvance.value);
-      if (Number.isNaN(avance) || avance < 0 || avance > 100) {
+      if (Number.isNaN(avance) || avance < 0 || avance > 100){
         alert("El porcentaje de avance debe estar entre 0 y 100.");
         return;
       }
-
-      if(requiereEvidencia && !archivo){
+      if (requiereEvidencia && !archivo && !tareaActual.Evidencia_Drive_URL){
         alert("Esta actividad requiere evidencia. Adjunta un archivo.");
         return;
       }
 
       const payload = {
-        idRegistro: mIdRegistro.value,
-        estado: mEstado.value,
-        avance: avance,
-        observacion: mObservacion.value,
-        archivoBase64: "",
-        archivoNombre: "",
-        archivoMime: ""
+        idRegistro:   document.getElementById("mIdRegistro").value,
+        estado:       document.getElementById("mEstado").value,
+        avance,
+        observacion:  document.getElementById("mObservacion").value,
+        archivoBase64:"", archivoNombre:"", archivoMime:""
       };
 
       bloquearGuardado(true);
 
-      if(archivo){
+      if (archivo){
         const reader = new FileReader();
-        reader.onload = function(e){
+        reader.onload = e => {
           payload.archivoBase64 = e.target.result.split(",")[1];
           payload.archivoNombre = archivo.name;
-          payload.archivoMime = archivo.type;
+          payload.archivoMime   = archivo.type || "application/octet-stream";
           enviarGuardado(payload);
         };
-        reader.onerror = function(){
-          bloquearGuardado(false);
-          mostrarError("No se pudo leer el archivo de evidencia.");
-        };
+        reader.onerror = () => { bloquearGuardado(false); mostrarError("No se pudo leer el archivo."); };
         reader.readAsDataURL(archivo);
       } else {
         enviarGuardado(payload);
@@ -596,8 +796,8 @@
         .withSuccessHandler(() => {
           alert("Actividad actualizada correctamente.");
           cerrarModal();
-          cargarDatos();
           bloquearGuardado(false);
+          cargarDatos();
         })
         .withFailureHandler(err => {
           bloquearGuardado(false);
@@ -607,37 +807,45 @@
     }
 
     function bloquearGuardado(bloquear){
-      const btn = document.getElementById("btnGuardar");
+      const btn    = document.getElementById("btnGuardar");
       btn.disabled = bloquear;
       btn.innerText = bloquear ? "Guardando..." : "Guardar";
     }
 
+    /* ── HELPERS ─────────────────────────────────────────── */
     function mostrarError(msg){
       alert(msg);
-      document.getElementById("tbody").innerHTML = `<tr><td colspan="7" class="empty">${escapeHtml(msg)}</td></tr>`;
+      document.getElementById("tbody").innerHTML =
+        `<tr><td colspan="7" class="empty">${escapeHtml(msg)}</td></tr>`;
+    }
+
+    function crearFechaLocal(fechaISO){
+      if (!fechaISO) return null;
+      const p = String(fechaISO).split("-");
+      if (p.length === 3) return new Date(Number(p[0]), Number(p[1]) - 1, Number(p[2]));
+      const d = new Date(fechaISO);
+      return isNaN(d) ? null : d;
     }
 
     function sameDay(a,b){
-      return a.getFullYear() === b.getFullYear() && a.getMonth() === b.getMonth() && a.getDate() === b.getDate();
+      return a.getFullYear()===b.getFullYear() &&
+             a.getMonth()   ===b.getMonth()    &&
+             a.getDate()    ===b.getDate();
     }
 
     function normalizarTexto(valor){
-      return String(valor || "")
-        .toLowerCase()
-        .trim()
-        .normalize("NFD")
-        .replace(/[\u0300-\u036f]/g, "");
+      return String(valor || "").toLowerCase().trim()
+        .normalize("NFD").replace(/[\u0300-\u036f]/g,"");
     }
 
     function escapeHtml(str){
-      return String(str || "")
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/\"/g, "&quot;")
-        .replace(/'/g, "&#039;");
+      return String(str||"")
+        .replace(/&/g,"&amp;").replace(/</g,"&lt;")
+        .replace(/>/g,"&gt;").replace(/"/g,"&quot;")
+        .replace(/'/g,"&#039;");
     }
 
+    /* ── INIT ────────────────────────────────────────────── */
     cargarUsuarios();
   </script>
 </body>
